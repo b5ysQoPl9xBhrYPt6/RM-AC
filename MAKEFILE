@@ -1,0 +1,5 @@
+RUNTIME_NAME = ExternRuntime.dll
+
+all:
+	gcc .\C\src\main.c --shared -o .\.build\${RUNTIME_NAME}
+	xcopy .\.build\${RUNTIME_NAME} .\Python\client\resources\dll\${RUNTIME_NAME} /Y /-I
