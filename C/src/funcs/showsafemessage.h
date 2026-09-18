@@ -1,7 +1,6 @@
-#ifndef SHOWSAFEMESSAGE_H
-#define SHOWSAFEMESSAGE_H
+#pragma once
 
-#include "..\export.h"
+#include "../export.h"
 
 typedef struct {
     wchar_t* MessageContent;
@@ -12,6 +11,8 @@ typedef struct {
 DWORD WINAPI ThMessageBox(IN LPVOID arg);
 
 UINT C_ReShowSafeMessage(IN wchar_t* content, IN wchar_t* title, IN UINT style) {
+    RuntimeWarning();
+    
     __THREAD_ARGS* Data = malloc(sizeof(*Data));
     
     Data->MessageContent = malloc((wcslen(content) + 1) * sizeof(wchar_t));
@@ -45,5 +46,3 @@ DWORD WINAPI ThMessageBox(IN LPVOID arg) {
 
     return 0;
 }
-
-#endif

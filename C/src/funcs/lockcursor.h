@@ -1,12 +1,9 @@
-#ifndef LOCKCURSOR_H
-#define LOCKCURSOR_H
+#pragma once
 
-#include "..\export.h"
+#include "../export.h"
 
 VOID C_ReLockCursorRuntime(IN BOOL lock) {
     RuntimeWarning();
     IsCursorLocked = lock;
     if (!lock) ClipCursor(NULL);
 }
-
-#endif

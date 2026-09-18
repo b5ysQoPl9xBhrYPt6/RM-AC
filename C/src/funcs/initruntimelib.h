@@ -1,20 +1,21 @@
-#ifndef INITRUNTIMELIB_H
+#pragma once
 
 #include <stdio.h>
-#include "..\export.h"
+#include "../export.h"
+#include "../resources.h"
 
 DWORD WINAPI ThMainLoop(IN LPVOID arg);
 VOID CheckCursor();
-VOID InitWarning();
-
+VOID LoadResources();
 
 UINT C_InitRuntimeLib() {
-    HANDLE Thread = CreateThread(NULL, 0, ThMainLoop, NULL, 0, NULL);
+    LoadResources();
+    // HANDLE Thread = CreateThread(NULL, 0, ThMainLoop, NULL, 0, NULL);
     
-    if (Thread == NULL) return GetLastError();
-    CloseHandle(Thread);
+    // if (!Thread) return GetLastError();
+    // CloseHandle(Thread);
 
-    IsInitialized = TRUE;
+    // IsInitialized = TRUE;
     return 0;
 }
 
@@ -27,7 +28,6 @@ DWORD WINAPI ThMainLoop(IN LPVOID arg) {
 
     return 0;
 }
-
 
 VOID CheckCursor() {
     GetClipCursor((LPRECT)&CursorRect);
@@ -45,4 +45,32 @@ VOID CheckCursor() {
     }
 }
 
-#endif
+VOID LoadResources() {
+    HRSRC res = FindResourceA(self, "bass.dll", RT_RCDATA);
+    if (!res) {
+        printf("FindResourceA('bass.dll') failed: %d\r\n", GetLastError());
+        return;
+    }
+
+    HGLOBAL data = LoadResource(self, res);
+    if (!data) {
+        printf("LoadResource('bass.dll') failed: %d\r\n", GetLastError());
+        return;
+    }
+
+    DWORD size = SizeofResource(self, res);
+    VOID*  ptr = LockResource(data);
+
+    printf("BASS size: %d bytes\r\n", size);
+
+    wchar_t* LibPath = L"";  // Here is the temp file path
+    MakeDirs(LibPath);
+    FILE* f = _wfopen(LibPath, L"wb");
+    if (!f) {
+        printf("_wfopen failed\r\n");
+        return;
+    }
+
+    fwrite(data, 1, size, f);
+    fclose(f);
+}

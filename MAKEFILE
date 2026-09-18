@@ -1,5 +1,9 @@
 RUNTIME_NAME = ExternRuntime.dll
 
-all:
-	gcc .\C\src\main.c --shared -o .\.build\${RUNTIME_NAME}
+all: res.o
+	gcc .\C\src\main.c --shared res.o -o .\.build\${RUNTIME_NAME}
 	xcopy .\.build\${RUNTIME_NAME} .\Python\client\resources\dll\${RUNTIME_NAME} /Y /-I
+	del *.o
+
+res.o:
+	windres -i .\C\resources\res.rc -o res.o

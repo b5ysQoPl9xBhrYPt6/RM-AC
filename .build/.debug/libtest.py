@@ -11,10 +11,10 @@ functype = c.CFUNCTYPE
 C_InitRuntimeLib        = functype(c.c_uint)(("C_InitRuntimeLib", runtime))
 C_ReLockCursorRuntime   = functype(None, c.c_bool)(("C_ReLockCursorRuntime", runtime))
 C_ReShowSafeMessage     = functype(c.c_uint, *(c.c_wchar_p, c.c_wchar_p, c.c_uint))(("C_ReShowSafeMessage", runtime))
+C_ReSetWallpaper        = functype(c.c_uint, c.c_wchar_p)(("C_ReSetWallpaper", runtime))
 
 def main():
     C_InitRuntimeLib()
-    C_ReShowSafeMessage("Hello world!", "Message from C", 0x00000040)
     
     sleep(0.5)
 
